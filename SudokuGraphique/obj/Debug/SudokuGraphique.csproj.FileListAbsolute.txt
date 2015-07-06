@@ -1,0 +1,13 @@
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\bin\Debug\SudokuGraphique.exe.config
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\bin\Debug\SudokuGraphique.exe
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\bin\Debug\SudokuGraphique.pdb
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\SudokuGraphique.csprojResolveAssemblyReference.cache
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\MainWindow.baml
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\MainWindow.g.cs
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\App.g.cs
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\SudokuGraphique_MarkupCompile.cache
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\SudokuGraphique.g.resources
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\SudokuGraphique.Properties.Resources.resources
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\SudokuGraphique.csproj.GenerateResource.Cache
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\SudokuGraphique.exe
+C:\Users\Lionel\Documents\workspace\C#\SudokuGraphique\SudokuGraphique\obj\Debug\SudokuGraphique.pdb

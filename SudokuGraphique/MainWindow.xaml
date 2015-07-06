@@ -1,0 +1,45 @@
+﻿<Window x:Class="SudokuGraphique.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding NomApplication}" Height="528" Width="950">
+    <Grid Margin="0,0,2,0" Height="444" VerticalAlignment="Top">
+        <Grid ShowGridLines="True" Margin="333,67,10,10" Name="Grid" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Rectangle Grid.ColumnSpan="9" Fill="White" Grid.RowSpan="9" Stroke="Black"/>
+            <Rectangle Grid.ColumnSpan="3" Fill="Gainsboro" Grid.RowSpan="3" Stroke="#00000000"/>
+            <Rectangle Grid.ColumnSpan="3" Fill="Gainsboro" Grid.RowSpan="3" Stroke="Black" Grid.Column="3" Grid.Row="3"/>
+            <Rectangle Grid.ColumnSpan="3" Fill="Gainsboro" Grid.RowSpan="3" Stroke="Black" Grid.Column="6"/>
+            <Rectangle Grid.ColumnSpan="3" Fill="Gainsboro" Grid.RowSpan="3" Stroke="Black" Grid.Row="6" Margin="0,0,0,1"/>
+            <Rectangle Grid.ColumnSpan="3" Fill="Gainsboro" Grid.RowSpan="3" Stroke="Black" Grid.Column="6" Grid.Row="6" Margin="0,1,0,0"/>
+        </Grid>
+        <Button Content="Résoudre" Margin="391,36,49,0" VerticalAlignment="Top" Height="26" Click="Button_Click"/>
+        <Menu Height="26" VerticalAlignment="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="New"/>
+            </MenuItem>
+        </Menu>
+        <ListBox Margin="10,51,0,0" ItemsSource="{Binding grilles}" HorizontalAlignment="Left" Width="269" Name="grilleListBox" SelectionChanged="grilleListBox_SelectionChanged" Height="383" VerticalAlignment="Top" />
+        <CheckBox Content="Résolu" HorizontalAlignment="Left" Height="19" Margin="594,458,0,-33" VerticalAlignment="Top" IsChecked="{Binding GrilleSelect.EstResolu}"/>
+    </Grid>
+</Window>
