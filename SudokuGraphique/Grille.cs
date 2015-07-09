@@ -184,12 +184,10 @@ namespace SudokuGraphique
                     Case c = Cases[row][column];
                     if (c.Valeur == '.')
                     {
-                        trouveHypotheses(ref c, column, row);
-                        if (c.NbreHypothese == 1)
+                        if(trouveHypotheses(ref c, column, row))
                         {
-                            c.Valeur = c.Hypotheses[0];
                             row = -1;
-                            column = -1;
+                            column = -1; //Redémarre au début de la grille
                             break;
                         }
                     }
@@ -198,33 +196,16 @@ namespace SudokuGraphique
             estResolu = true;
         }
 
-        private void trouveHypotheses(ref Case c, int column, int row)
+        private bool trouveHypotheses(ref Case c, int column, int row)
         {
-            // Recherche hypothèses sur ligne
             Case[] ligneArray = Cases[row];
-            string ligne = string.Join<Case>("", ligneArray);
-            IEnumerable<char> s = c.Hypotheses.Intersect(ligne);
-            foreach(char ch in s)
-            {
-                int index = Array.IndexOf(c.Hypotheses, ch);
-                c.Hypotheses = c.Hypotheses.Where(val => val != ch).ToArray();
-            }
 
-            // Recherche hypothèses sur colonne
             List<Case> colonneList = new List<Case>();
             for (int i = 0; i < Longueur; i++)
             {
                 colonneList.Add(Cases[i][column]);
             }
-            string colonne = string.Join<Case>("", colonneList);
-            IEnumerable<char> interColonne = c.Hypotheses.Intersect(colonne);
-            foreach (char ch in interColonne)
-            {
-                int index = Array.IndexOf(c.Hypotheses, ch);
-                c.Hypotheses = c.Hypotheses.Where(val => val != ch).ToArray();
-            }
-
-            // Recherche hypothèses sur région
+         
             List<Case> regionList = new List<Case>();
             int longueurRegion = Convert.ToInt16(Math.Sqrt(Longueur));
 
@@ -248,6 +229,42 @@ namespace SudokuGraphique
                 }
             }
 
+            //UnSeulCandidat(ref c, ligneArray, colonneList, regionList);
+
+            return UnSeulCandidat(ref c, ligneArray, colonneList, regionList);
+        }
+
+        private bool UnSeulCandidat(ref Case c, Case[] ligneArray, List<Case> colonneList, List<Case> regionList)
+        {
+            // Recherche un seul candidat sur une ligne
+            string ligne = string.Join<Case>("", ligneArray);
+            IEnumerable<char> s = c.Hypotheses.Intersect(ligne);
+            foreach (char ch in s)
+            {
+                int index = Array.IndexOf(c.Hypotheses, ch);
+                c.Hypotheses = c.Hypotheses.Where(val => val != ch).ToArray();
+            }
+            if(c.NbreHypothese == 1)
+            {
+                c.Valeur = c.Hypotheses[0];
+                return true;
+            }
+
+            // Recherche un seul candidat sur une colonne
+            string colonne = string.Join<Case>("", colonneList);
+            IEnumerable<char> interColonne = c.Hypotheses.Intersect(colonne);
+            foreach (char ch in interColonne)
+            {
+                int index = Array.IndexOf(c.Hypotheses, ch);
+                c.Hypotheses = c.Hypotheses.Where(val => val != ch).ToArray();
+            }
+            if(c.NbreHypothese == 1)
+            {
+                c.Valeur = c.Hypotheses[0];
+                return true;
+            }
+
+            // Recherche un seul candidat sur une région
             string region = string.Join<Case>("", regionList);
             IEnumerable<char> interRegion = c.Hypotheses.Intersect(region);
             foreach (char ch in interRegion)
@@ -255,7 +272,13 @@ namespace SudokuGraphique
                 int index = Array.IndexOf(c.Hypotheses, ch);
                 c.Hypotheses = c.Hypotheses.Where(val => val != ch).ToArray();
             }
+            if (c.NbreHypothese == 1)
+            {
+                c.Valeur = c.Hypotheses[0];
+                return true;
+            }
 
+            return false;
         }
 
          private char[,] GetConvertCasesToChars()

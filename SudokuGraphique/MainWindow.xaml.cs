@@ -34,8 +34,55 @@ namespace SudokuGraphique
 
         private void grilleListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            
             App.ViewModelSudokus.GrilleSelect = (Grille)grilleListBox.SelectedItem;
-            //Grid.ColumnDefinitions.
+
+            if (App.ViewModelSudokus.GrilleSelect.Longueur != 9)
+            {
+                for (int i = 0; i < App.ViewModelSudokus.GrilleSelect.Longueur - 9; i++)
+                {
+                    RowDefinition row = new RowDefinition();
+                    row.Height = new GridLength(1, GridUnitType.Star);
+                    GridSudoku.RowDefinitions.Add(row);
+
+                    ColumnDefinition column = new ColumnDefinition();
+                    column.Width = new GridLength(1, GridUnitType.Star);
+                    GridSudoku.ColumnDefinitions.Add(column);
+                }
+            }
+
+            for (int row = 0; row < App.ViewModelSudokus.GrilleSelect.Longueur; row++)
+             {
+                for (int column = 0; column < App.ViewModelSudokus.GrilleSelect.Longueur; column++)
+                {
+                                Case c = App.ViewModelSudokus.GrilleSelect.Cases[row][column];
+
+                                TextBlock txtBlock = new TextBlock();
+                                txtBlock.Text = c.Valeur.ToString();
+                                txtBlock.FontSize = 14;
+                                txtBlock.FontWeight = FontWeights.Bold;
+                                txtBlock.VerticalAlignment = VerticalAlignment.Center;
+                                txtBlock.HorizontalAlignment = HorizontalAlignment.Center;
+                                Grid.SetRow(txtBlock, row);
+                                Grid.SetColumn(txtBlock, column);
+
+                                /*if(c.Hypotheses != null)
+                                {
+                                    TextBlock txtBlockHypotheses = new TextBlock();
+                                    txtBlockHypotheses.Text = new String(c.Hypotheses);
+                                    txtBlockHypotheses.FontSize = 8;
+                                    txtBlockHypotheses.VerticalAlignment = VerticalAlignment.Top;
+                                    txtBlockHypotheses.HorizontalAlignment = HorizontalAlignment.Center;
+                                    Grid.SetRow(txtBlockHypotheses, row);
+                                    Grid.SetColumn(txtBlockHypotheses, column);
+                                    GridSudoku.Children.Add(txtBlockHypotheses);
+                                }*/
+
+
+
+                                GridSudoku.Children.Add(txtBlock);
+                            }
+                        }
         }
     }
 }
