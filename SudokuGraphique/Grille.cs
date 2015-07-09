@@ -229,7 +229,7 @@ namespace SudokuGraphique
                 }
             }
 
-            //UnSeulCandidat(ref c, ligneArray, colonneList, regionList);
+            CandidatsIdentiques(ref c, ligneArray, colonneList, regionList);
 
             return UnSeulCandidat(ref c, ligneArray, colonneList, regionList);
         }
@@ -279,6 +279,26 @@ namespace SudokuGraphique
             }
 
             return false;
+        }
+
+        private bool CandidatsIdentiques(ref Case c, Case[] ligneArray, List<Case> colonneList, List<Case> regionList)
+        {
+            int nbCandidatsIdentiques = 0;
+            Case candidatIdentique = new Case();
+            // Recherche sur la ligne
+            for(int i = 0; i < ligneArray.Length; i++)
+            {
+                if((ligneArray[i] != c) && (ligneArray[i].Hypotheses == c.Hypotheses) && (c.NbreHypothese == 2))
+                {
+                    nbCandidatsIdentiques++;
+                    candidatIdentique = ligneArray[i];
+                }
+            }
+            if(nbCandidatsIdentiques == 1)
+            {
+
+            }
+            return true;
         }
 
          private char[,] GetConvertCasesToChars()

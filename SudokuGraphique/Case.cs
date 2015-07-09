@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SudokuGraphique
 {
-    public class Case
+    public class Case : INotifyPropertyChanged
     {
         private char valeur;
         private int nbreHypothese;
@@ -20,7 +21,10 @@ namespace SudokuGraphique
         public char Valeur
         {
             get { return valeur; }
-            set { valeur = value; }
+            set {
+                valeur = value;
+                OnPropertyChanged("valeur");
+            }
         }
 
         public int NbreHypothese
@@ -38,6 +42,15 @@ namespace SudokuGraphique
         public override string ToString()
         {
             return Convert.ToString(valeur);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
