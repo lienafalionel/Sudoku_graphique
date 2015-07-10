@@ -49,6 +49,8 @@ namespace SudokuGraphique
                     {
                         grille.Cases[i][j] = new Case();
                         grille.Cases[i][j].Valeur = (char)file.Read();
+                        grille.Cases[i][j].Row = i;
+                        grille.Cases[i][j].Column = j;
                     }
                     char tabulation = (char)file.Read();
                     char sautDeLigne = (char)file.Read();

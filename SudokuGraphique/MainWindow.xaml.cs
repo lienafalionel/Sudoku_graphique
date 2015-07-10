@@ -24,11 +24,17 @@ namespace SudokuGraphique
         {
             InitializeComponent();
             DataContext = App.ViewModelSudokus;
+            RésoudreBtn.IsEnabled = false;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Resoudre_Click(object sender, RoutedEventArgs e)
         {
             App.ViewModelSudokus.resoudre();
+        }
+
+        private void Init_Click(object sender, RoutedEventArgs e)
+        {
+            App.ViewModelSudokus = new SudokusViewModel();
         }
 
         private void grilleListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -46,10 +52,24 @@ namespace SudokuGraphique
             {
                 RowDefinition row = new RowDefinition();
                 row.Height = new GridLength(1, GridUnitType.Star);
-                GridSudoku.RowDefinitions.Add(row);
+                
 
                 ColumnDefinition column = new ColumnDefinition();
                 column.Width = new GridLength(1, GridUnitType.Star);
+                
+
+                if(i % App.ViewModelSudokus.GrilleSelect.Longueur == 0)
+                {
+                    Border b = new Border();
+                    b.BorderBrush = Brushes.Red;
+                    Grid.SetRow(b, i);
+                    Grid.SetColumn(b, i);
+
+                    Grid.SetColumnSpan(b, Convert.ToInt16(Math.Sqrt(App.ViewModelSudokus.GrilleSelect.Longueur)));
+                    b.BorderThickness = new Thickness(1);
+                }
+
+                GridSudoku.RowDefinitions.Add(row);
                 GridSudoku.ColumnDefinitions.Add(column);
             }
 
@@ -77,17 +97,22 @@ namespace SudokuGraphique
 
 
 
-                    /*if(c.Hypotheses != null)
+                    if(c.Hypotheses != null)
                     {
                         TextBlock txtBlockHypotheses = new TextBlock();
-                        txtBlockHypotheses.Text = new String(c.Hypotheses);
+                        txtBlockHypotheses.Text = c.Hypotheses;
                         txtBlockHypotheses.FontSize = 8;
                         txtBlockHypotheses.VerticalAlignment = VerticalAlignment.Top;
                         txtBlockHypotheses.HorizontalAlignment = HorizontalAlignment.Center;
+                        
+                        Binding bindingHypothese = new Binding("Hypotheses");
+                        bindingHypothese.Source = App.ViewModelSudokus.GrilleSelect.Cases[row][column];
+                        bindingHypothese.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                        txtBlockHypotheses.SetBinding(TextBlock.TextProperty, bindingHypothese);
                         Grid.SetRow(txtBlockHypotheses, row);
                         Grid.SetColumn(txtBlockHypotheses, column);
                         GridSudoku.Children.Add(txtBlockHypotheses);
-                    }*/
+                    }
 
 
 
@@ -101,6 +126,15 @@ namespace SudokuGraphique
             GridSudoku.Children.Clear();
             GridSudoku.RowDefinitions.Clear();
             GridSudoku.ColumnDefinitions.Clear();
+
+            if (grilleListBox.SelectedIndex >= 0)
+            {
+                RésoudreBtn.IsEnabled = true;
+            }
+            else
+            {
+                RésoudreBtn.IsEnabled = false;
+            }
         }
     }
 }

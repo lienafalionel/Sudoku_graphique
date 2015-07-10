@@ -11,7 +11,9 @@ namespace SudokuGraphique
     {
         private char valeur;
         private int nbreHypothese;
-        private char[] hypotheses = new char[9];
+        private string hypotheses;
+        private int row;
+        private int column;
 
         public Case()
         {
@@ -23,7 +25,7 @@ namespace SudokuGraphique
             get { return valeur; }
             set {
                 valeur = value;
-                OnPropertyChanged("valeur");
+                OnPropertyChanged("Valeur");
             }
         }
 
@@ -33,10 +35,24 @@ namespace SudokuGraphique
             set { nbreHypothese = value; }
         }
 
-        public char[] Hypotheses
+        public string Hypotheses
         {
             get { return hypotheses; }
-            set { hypotheses = value; }
+            set { hypotheses = value;
+                OnPropertyChanged("Hypotheses");
+            }
+        }
+
+        public int Row
+        {
+            get { return row; }
+            set { row = value; }
+        }
+
+        public int Column
+        {
+            get { return column; }
+            set { column = value; }
         }
 
         public override string ToString()

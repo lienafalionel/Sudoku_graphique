@@ -86,7 +86,7 @@ namespace SudokuGraphique
                     }
                     if(c.Valeur == '.')
                     {
-                        c.Hypotheses = Symboles.ToCharArray();
+                        c.Hypotheses = Symboles;
                     }
                     else
                     {
@@ -184,7 +184,7 @@ namespace SudokuGraphique
                     Case c = Cases[row][column];
                     if (c.Valeur == '.')
                     {
-                        if(trouveHypotheses(ref c, column, row))
+                        if(trouveHypotheses(ref c))
                         {
                             row = -1;
                             column = -1; //Redémarre au début de la grille
@@ -196,25 +196,25 @@ namespace SudokuGraphique
             estResolu = true;
         }
 
-        private bool trouveHypotheses(ref Case c, int column, int row)
+        private bool trouveHypotheses(ref Case c)
         {
-            Case[] ligneArray = Cases[row];
+            Case[] ligneArray = Cases[c.Row];
 
             List<Case> colonneList = new List<Case>();
             for (int i = 0; i < Longueur; i++)
             {
-                colonneList.Add(Cases[i][column]);
+                colonneList.Add(Cases[i][c.Column]);
             }
          
             List<Case> regionList = new List<Case>();
             int longueurRegion = Convert.ToInt16(Math.Sqrt(Longueur));
 
-            int moduloColumn = column % longueurRegion;
-            int columnStartRegion = column - moduloColumn;
+            int moduloColumn = c.Column % longueurRegion;
+            int columnStartRegion = c.Column - moduloColumn;
             int columnEndRegion = columnStartRegion + longueurRegion - 1;
 
-            int moduloRow = row % longueurRegion;
-            int rowStartRegion = row - moduloRow;
+            int moduloRow = c.Row % longueurRegion;
+            int rowStartRegion = c.Row - moduloRow;
             int rowEndRegion = rowStartRegion + longueurRegion - 1;
 
             for (int i = 0; i < Longueur; i++)
@@ -229,9 +229,15 @@ namespace SudokuGraphique
                 }
             }
 
-            CandidatsIdentiques(ref c, ligneArray, colonneList, regionList);
+            bool unSeulCandidat = UnSeulCandidat(ref c, ligneArray, colonneList, regionList);
+            bool candidatsIdentiques = CandidatsIdentiques(ref c, ref ligneArray, ref colonneList, ref regionList);
+            if(candidatsIdentiques)
+            {
+                unSeulCandidat = UnSeulCandidat(ref c, ligneArray, colonneList, regionList);
+            }
 
-            return UnSeulCandidat(ref c, ligneArray, colonneList, regionList);
+            return unSeulCandidat;
+            //return unSeulCandidat;
         }
 
         private bool UnSeulCandidat(ref Case c, Case[] ligneArray, List<Case> colonneList, List<Case> regionList)
@@ -241,8 +247,11 @@ namespace SudokuGraphique
             IEnumerable<char> s = c.Hypotheses.Intersect(ligne);
             foreach (char ch in s)
             {
-                int index = Array.IndexOf(c.Hypotheses, ch);
-                c.Hypotheses = c.Hypotheses.Where(val => val != ch).ToArray();
+                int index = c.Hypotheses.IndexOf(ch);
+                
+                //c.Hypotheses = c.Hypotheses.Where(val => val != ch).ToString();
+                IEnumerable<char> i = c.Hypotheses.Where(val => val != ch);
+                c.Hypotheses = string.Join("", i.ToArray());
             }
             if(c.NbreHypothese == 1)
             {
@@ -255,8 +264,8 @@ namespace SudokuGraphique
             IEnumerable<char> interColonne = c.Hypotheses.Intersect(colonne);
             foreach (char ch in interColonne)
             {
-                int index = Array.IndexOf(c.Hypotheses, ch);
-                c.Hypotheses = c.Hypotheses.Where(val => val != ch).ToArray();
+                IEnumerable<char> i = c.Hypotheses.Where(val => val != ch);
+                c.Hypotheses = string.Join("", i.ToArray());
             }
             if(c.NbreHypothese == 1)
             {
@@ -269,8 +278,8 @@ namespace SudokuGraphique
             IEnumerable<char> interRegion = c.Hypotheses.Intersect(region);
             foreach (char ch in interRegion)
             {
-                int index = Array.IndexOf(c.Hypotheses, ch);
-                c.Hypotheses = c.Hypotheses.Where(val => val != ch).ToArray();
+                IEnumerable<char> i = c.Hypotheses.Where(val => val != ch);
+                c.Hypotheses = string.Join("", i.ToArray());
             }
             if (c.NbreHypothese == 1)
             {
@@ -281,23 +290,70 @@ namespace SudokuGraphique
             return false;
         }
 
-        private bool CandidatsIdentiques(ref Case c, Case[] ligneArray, List<Case> colonneList, List<Case> regionList)
+        private bool CandidatsIdentiques(ref Case c, ref Case[] ligneArray, ref List<Case> colonneList, ref List<Case> regionList)
         {
             int nbCandidatsIdentiques = 0;
             Case candidatIdentique = new Case();
             // Recherche sur la ligne
             for(int i = 0; i < ligneArray.Length; i++)
             {
+                bool b1 = (ligneArray[i] != c);
+                bool b2 = (ligneArray[i].Hypotheses == c.Hypotheses);
                 if((ligneArray[i] != c) && (ligneArray[i].Hypotheses == c.Hypotheses) && (c.NbreHypothese == 2))
                 {
                     nbCandidatsIdentiques++;
-                    candidatIdentique = ligneArray[i];
+                    candidatIdentique = Cases[ligneArray[i].Row][ligneArray[i].Column];
                 }
             }
+            
             if(nbCandidatsIdentiques == 1)
             {
-
+                for (int j = 0; j < ligneArray.Length; j++)
+                {
+                    if(ligneArray[j].Hypotheses != candidatIdentique.Hypotheses && ligneArray[j].Hypotheses != null)
+                    {
+                        foreach(char ch in c.Hypotheses)
+                        {
+                            IEnumerable<char> enumerable = ligneArray[j].Hypotheses.Where(val => val != ch);
+                            Cases[ligneArray[j].Row][ligneArray[j].Column].Hypotheses = string.Join("", enumerable);
+                        }
+                    }
+                }
+                    return true;
             }
+
+            // Recherche sur la région
+            nbCandidatsIdentiques = 0;
+            candidatIdentique = new Case();
+            foreach(Case currentCase in regionList)
+            {
+                if(c != currentCase && c.Hypotheses == currentCase.Hypotheses && c.NbreHypothese == 2)
+                {
+                    nbCandidatsIdentiques++;
+                    candidatIdentique = Cases[currentCase.Row][currentCase.Column];
+                }
+            }
+            if (nbCandidatsIdentiques == 1)
+            {
+                foreach(Case currentCase in regionList)
+                {
+                    if(currentCase.Hypotheses != candidatIdentique.Hypotheses && currentCase.Hypotheses != null)
+                    {
+                        foreach (char ch in c.Hypotheses)
+                        {
+                            IEnumerable<char> enumerable = currentCase.Hypotheses.Where(val => val != ch);
+                            Cases[currentCase.Row][currentCase.Column].Hypotheses = string.Join("", enumerable);
+                        }
+                    }
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool XWing()
+        {
             return true;
         }
 

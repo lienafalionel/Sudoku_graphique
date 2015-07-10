@@ -7,7 +7,7 @@
         <Grid ShowGridLines="True" Margin="333,67,10,10" Name="GridSudoku" Background="White">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -27,14 +27,17 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="122" Margin="333,312,0,0" VerticalAlignment="Top" Width="198"/>
         </Grid>
         <Rectangle Margin="333,67,10,10" Stroke="Black"/>
-        <Button Content="Résoudre" Margin="391,36,49,0" VerticalAlignment="Top" Height="26" Click="Button_Click"/>
+
+        <Button Content="Résoudre" Margin="391,36,49,0" VerticalAlignment="Top" Height="26" Click="Resoudre_Click" Name="RésoudreBtn"/>
         <Menu Height="26" VerticalAlignment="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="New"/>
             </MenuItem>
         </Menu>
         <ListBox Margin="10,51,0,10" ItemsSource="{Binding grilles}" HorizontalAlignment="Left" Width="269" Name="grilleListBox" SelectionChanged="grilleListBox_SelectionChanged" />
+
     </Grid>
 </Window>
